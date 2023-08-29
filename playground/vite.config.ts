@@ -4,7 +4,9 @@ import skRouterGuard from 'vite-plugin-sk-router-guard'
 import Inspect from 'vite-plugin-inspect'
 export default defineConfig({
   plugins: [
-    skRouterGuard(),
+    skRouterGuard({
+      hookPath: './router-guard.skrg.ts'
+    }),
     sveltekit(),
     Inspect(),
   ],

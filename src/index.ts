@@ -17,7 +17,7 @@ import { transformPage } from "./transform/transform-page";
 import { parsePageScript } from "./parse/parse-page-script";
 
 export function getHookPath(projectPath: string, hookPath: string |undefined) {
-  let finalHookPath = `${projectPath}/${path}`
+  let finalHookPath = normalizePath(path.resolve(projectPath, hookPath || ''))
   const rgTsPath = 'src/utils/router-guard.skrg.ts'
   const rgJsPath = 'src/utils/router-guard.skrg.js'
   if(!hookPath || hookPath === 'utils'){
