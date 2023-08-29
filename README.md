@@ -1,7 +1,7 @@
 # vite-plugin-sk-router-guard
 🪐 A global client routing guard plugin based on svelte-kit
 
-English | [中文](https://github.com/baiwusanyu-c/unplugin-vue-ce/blob/master/README.ZH-CN.md)
+English | [中文](./README.ZH-CN.md)
 
 ## Core Strategy
 `vite-plugin-sk-router-guard` will be introduced in `root.svelte` according to the specified hook script path, 
