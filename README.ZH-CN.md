@@ -1,32 +1,30 @@
 # vite-plugin-sk-router-guard
-🪐 A global client routing guard plugin based on svelte-kit
+🪐 基于svelte-kit的全局客户端路由守卫插件
 
-English | [中文](https://github.com/baiwusanyu-c/unplugin-vue-ce/blob/master/README.ZH-CN.md)
+[English](https://github.com/baiwusanyu-c/unplugin-vue-ce/blob/master/README.md) | 中文
 
 ## Core Strategy
-`vite-plugin-sk-router-guard` will be introduced in `root.svelte` according to the specified hook script path, 
-and register the context.  
-Then get the context in every `+page.svelte` 
-and register as [afterNavigate](https://kit.svelte.dev/docs/modules#$app-navigation-afternavigate) or
-[beforeNavigate](https://kit.svelte.dev/docs/modules#$app-navigation-beforenavigate).  
-In this way, a similar "global route guard hook function" is realized.  
+`vite-plugin-sk-router-guard`会根据指定的钩子脚本路径，在 `root.svelte` 中引入，并注册上下文。  
+然后在每一个 `+page.svelte` 中获取上下文并注册为[afternavigate](https://kit.svelte.dev/docs/modules#$app-navigation-afternavigate)或
+[beforenavigate](https://kit.svelte.dev/docs/modules#$app-navigation-beforenavigate)。  
+这样就是实现了类似“全局的路由守卫钩子函数”。
 
 ## Install
 
 ```bash
 npm i vite-plugin-sk-router-guard -D
 ```
-or
+或
 ```bash
 yarn add vite-plugin-sk-router-guard -D
 ```
-or
+或
 ```bash
 pnpm add vite-plugin-sk-router-guard -D
 ```
 
 ## Usage
-1. Use the plugin and configure
+1. 使用插件并配置
 
 ```typescript
 // vite.config.ts
@@ -41,11 +39,10 @@ export default defineConfig({
 })
 ```
 
-2. Write a hook script  
-   Suppose your project has the following path:    
-   ![img.png](public/img.png)  
-   Then `vite-plugin-sk-router-guard` will load the script under 
-    this path by default as the global routing navigation function
+2. 编写钩子脚本  
+假设你的项目有如下路径:  
+![img.png](public/img.png)  
+那么`vite-plugin-sk-router-guard`会默认加载这个路径下的脚本作为全局的路由导航方法  
 
 ```typescript
 // router-guard.skrg.ts
@@ -71,7 +68,7 @@ export const navigate = {
 ```typescript
 export interface Options {
   /**
-   * The path where the hook script is located
+   * 钩子函数脚本路径
    * @default src/utils/router-guard.skrg.(ts/js)
    */
   hookPath?: string
@@ -80,5 +77,5 @@ export interface Options {
 ```
 
 ## Tips
-* `vite-plugin-sk-router-guard` will only inject code into `+page.svelte` and `root.svelte`
-* `router-guard.skrg` must export an object named `navigate`
+* `vite-plugin-sk-router-guard`只会对 `+page.svelte` 和 `root.svelte` 进行代码注入
+* `router-guard.skrg` 必须导出一个名为 `navigate` 的对象

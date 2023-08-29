@@ -1,10 +1,10 @@
 import { sveltekit } from '@sveltejs/kit/vite'
 import { defineConfig } from 'vite'
-import svelteKitInspector from 'vite-plugin-sk-router-guard'
+import skRouterGuard from 'vite-plugin-sk-router-guard'
 import Inspect from 'vite-plugin-inspect'
 export default defineConfig({
   plugins: [
-    svelteKitInspector(),
+    skRouterGuard(),
     sveltekit(),
     Inspect(),
   ],

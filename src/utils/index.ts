@@ -5,7 +5,7 @@ export * from './types'
 
 export function parseSvelteRequest(id: string) {
   const [filePath] = id.split('?', 2)
-  const url = new URL(id, 'http://domain.inspector')
+  const url = new URL(id, 'http://domain.skRouterGuard')
   const query = Object.fromEntries(url.searchParams.entries()) as any
   if (query.svelte != null)
     query.svelte = true
