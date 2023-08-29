@@ -36,12 +36,7 @@
     "dist",
     "*.d.ts",
     "README.md",
-    "README.ZH-CN.md",
-    "src/app.js",
-    "src/load-kit.js",
-    "src/load.js",
-    "src/Overlay.svelte",
-    "src/components/Logo.svelte"
+    "README.ZH-CN.md"
   ],
   "engines": {
     "node": ">=v14"
