@@ -1,7 +1,7 @@
 # vite-plugin-sk-router-guard
 🪐 基于svelte-kit的全局客户端路由守卫插件
 
-[English](https://github.com/baiwusanyu-c/unplugin-vue-ce/blob/master/README.md) | 中文
+[English](./README.md) | 中文
 
 ## Core Strategy
 `vite-plugin-sk-router-guard`会根据指定的钩子脚本路径，在 `root.svelte` 中引入，并注册上下文。  
