@@ -1,13 +1,12 @@
 import { sveltekit } from '@sveltejs/kit/vite'
 import { defineConfig } from 'vite'
 import svelteKitInspector from 'vite-plugin-sk-router-guard'
+import Inspect from 'vite-plugin-inspect'
 export default defineConfig({
   plugins: [
-    svelteKitInspector({
-      pickOnlyOnce: true,
-      kit: true,
-    }),
+    svelteKitInspector(),
     sveltekit(),
+    Inspect(),
   ],
 })
 

@@ -3,44 +3,47 @@ import {
   DEFAULT_CONFIG,
   READ_HOOK_FAIL,
   type SKRouterGuardOptions,
+  parseSvelteRequest,
 } from './utils'
 
-import type { PluginOption, ServerOptions } from "vite";
+import type { PluginOption } from "vite";
 import { extend, log, setGlobalPrefix } from "baiwusanyu-utils";
 import * as fs from 'fs'
 import { normalizePath } from "vite";
 import * as path from "path";
 import MagicString from "magic-string";
-// TODO unit test
-export function getHookContent(projectPath: string, hookpath: string |undefined) {
+import { transformRoot } from "./transform/transform-root";
+import { transformPage } from "./transform/transform-page";
+import { parsePageScript } from "./parse/parse-page-script";
+
+export function getHookPath(projectPath: string, hookPath: string |undefined) {
   let finalHookPath = `${projectPath}/${path}`
   const rgTsPath = 'src/utils/router-guard.skrg.ts'
   const rgJsPath = 'src/utils/router-guard.skrg.js'
-  if(!hookpath || hookpath === 'utils'){
+  if(!hookPath || hookPath === 'utils'){
     finalHookPath = `${projectPath}/${rgTsPath}`
   }
 
-  let content = ''
+  let res = ''
   // get content （router-guard.ts、 custom path）
   if (fs.existsSync(finalHookPath)) {
-    content =  fs.readFileSync(finalHookPath, { encoding: 'utf8'})
+    res =  finalHookPath
   } else  if (fs.existsSync(`${projectPath}/${rgJsPath}`)) {
     // get content （router-guard.js）
-    content =  fs.readFileSync(finalHookPath, { encoding: 'utf8'})
+    res =  finalHookPath
   } else {
     log('error', READ_HOOK_FAIL)
   }
-  return content
+  return res
 }
 
 function skRouterGuard(options: SKRouterGuardOptions = DEFAULT_CONFIG): PluginOption {
   setGlobalPrefix(`[${PLUGIN_NAME}]: `)
   const projectPath = normalizePath(path.resolve())
-  let serverOptions: ServerOptions | undefined
   const finalOptions = extend(DEFAULT_CONFIG, options)
-  const { hookPath,  hookContent: hContent} = finalOptions
-  const hookContent =  hContent ? hContent : getHookContent(projectPath, hookPath)
-  if(!hookContent){
+  const { hookPath,  } = finalOptions
+  const finalHookPath =  getHookPath(projectPath, hookPath)
+  if(!finalHookPath){
     log('error', READ_HOOK_FAIL)
     return
   }
@@ -52,14 +55,10 @@ function skRouterGuard(options: SKRouterGuardOptions = DEFAULT_CONFIG): PluginOp
         return;
       }
 
-      /*const { filename } = parseSvelteRequest(id)
-      const isViteEnv = filename.endsWith('vite/dist/client/client.mjs')
-
-      if (isViteEnv) {
+      const { filePath, query } = parseSvelteRequest(id)
+      if(filePath.includes('root.svelte') && query.type !== 'style'){
         const mgcStr = new MagicString(code)
-        // inject load-kit.js into vite client
-        mgcStr.append(`\n import('${V_INSPECTOR_PATH}load-kit.js') \n`)
-
+        transformRoot(mgcStr, finalHookPath)
         return {
           code: mgcStr.toString(),
           get map() {
@@ -70,7 +69,22 @@ function skRouterGuard(options: SKRouterGuardOptions = DEFAULT_CONFIG): PluginOp
             })
           },
         }
-      }*/
+      }
+      if(filePath.includes('+page.svelte') && query.type !== 'style'){
+        const mgcStr = new MagicString(code)
+        const scriptTag = parsePageScript(code)
+        transformPage(mgcStr, scriptTag)
+        return {
+          code: mgcStr.toString(),
+          get map() {
+            return mgcStr.generateMap({
+              source: id,
+              includeContent: true,
+              hires: true,
+            })
+          },
+        }
+      }
     },
   }
 }
